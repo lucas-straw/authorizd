@@ -193,11 +193,15 @@ footer a:hover { text-decoration: underline; }
   overflow: hidden;
 }
 
-.confetti-burst {
-  font-size: 4rem;
-  animation: pop 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  display: block;
-  margin-bottom: 16px;
+.confetti-lottie {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 500px;
+  height: 100%;
+  pointer-events: none;
 }
 
 .savings-badge {
