@@ -4,12 +4,7 @@
  * The discount is only applied after Facebook confirms the post was made.
  */
 
-// ---------------------------------------------------------------------------
-// Config — store owner replaces this with their Facebook App ID
-// Get one free at: developers.facebook.com → Create App → Consumer
-// ---------------------------------------------------------------------------
 const FB_APP_ID = '931561519624337';
-
 const DISCOUNT_PERCENTAGE = 15;
 
 const ORDER = {
@@ -24,12 +19,7 @@ const SHARE_TEXT = `Just grabbed something great from authorizd! 🛍️ Check t
 const SHARE_URL  = window.location.href;
 
 window.fbAsyncInit = function () {
-  FB.init({
-    appId:   FB_APP_ID,
-    cookie:  true,
-    xfbml:   true,
-    version: 'v19.0',
-  });
+  FB.init({ appId: FB_APP_ID, cookie: true, xfbml: true, version: 'v19.0' });
 };
 
 function fmt(n) { return '$' + n.toFixed(2); }
@@ -52,9 +42,9 @@ function renderOrder(discounted = false) {
     </tr>
   `).join('');
 
-  document.getElementById('orderSubtotal').textContent    = fmt(subtotal);
-  document.getElementById('orderTotal').textContent       = fmt(total);
-  document.getElementById('placeOrderTotal').textContent  = fmt(total);
+  document.getElementById('orderSubtotal').textContent   = fmt(subtotal);
+  document.getElementById('orderTotal').textContent      = fmt(total);
+  document.getElementById('placeOrderTotal').textContent = fmt(total);
 
   if (discounted) {
     document.getElementById('discountAmount').textContent = '-' + fmt(discount);
@@ -69,20 +59,14 @@ let hasShared = false;
 
 function openFBShare() {
   if (hasShared) return;
-
   const btn = document.getElementById('fbShareBtn');
   btn.disabled = true;
   btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Opening Facebook…';
 
   waitForFB(() => {
-    FB.ui({
-      method: 'share',
-      href:   SHARE_URL,
-      quote:  SHARE_TEXT,
-    }, function (response) {
+    FB.ui({ method: 'share', href: SHARE_URL, quote: SHARE_TEXT }, function (response) {
       btn.disabled = false;
       btn.innerHTML = '<i class="bi bi-facebook"></i> Share on Facebook &amp; Save 15%';
-
       if (response && !response.error_message) {
         hasShared = true;
         applyDiscount();
@@ -94,26 +78,20 @@ function openFBShare() {
 }
 
 function waitForFB(callback) {
-  if (typeof FB !== 'undefined') {
-    callback();
-  } else {
-    setTimeout(() => waitForFB(callback), 100);
-  }
+  if (typeof FB !== 'undefined') { callback(); }
+  else { setTimeout(() => waitForFB(callback), 100); }
 }
 
 function applyDiscount() {
   renderOrder(true);
-
   document.getElementById('sharePrompt').classList.add('d-none');
   const success = document.getElementById('shareSuccess');
   success.classList.remove('d-none');
   void success.offsetHeight;
   success.classList.add('animate-in');
-
   const totalCell = document.getElementById('orderTotal');
   totalCell.classList.add('total-updated');
   setTimeout(() => totalCell.classList.remove('total-updated'), 1800);
-
   document.getElementById('placeOrderBtn').classList.add('discounted');
 }
 
@@ -126,13 +104,30 @@ function setupNativeShare() {
   if (!navigator.share) return;
   btn.classList.remove('d-none');
   btn.addEventListener('click', async () => {
-    try {
-      await navigator.share({ title: 'Check out authorizd!', text: SHARE_TEXT, url: SHARE_URL });
-    } catch { /* cancelled */ }
+    try { await navigator.share({ title: 'Check out authorizd!', text: SHARE_TEXT, url: SHARE_URL }); }
+    catch { /* cancelled */ }
   });
 }
 
+function showCongrats(discounted) {
+  const { subtotal, discount, total } = calcTotals(discounted);
+  document.querySelector('.container.py-4').classList.add('d-none');
+  const screen = document.getElementById('congratsScreen');
+  screen.classList.remove('d-none');
+  document.getElementById('congratsSavings').textContent  = fmt(discount);
+  document.getElementById('congratsOriginal').textContent = fmt(subtotal);
+  document.getElementById('congratsDiscount').textContent = '-' + fmt(discount);
+  document.getElementById('congratsTotal').textContent    = fmt(total);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+  if (new URLSearchParams(window.location.search).get('success') === 'true') {
+    renderOrder(true);
+    showCongrats(true);
+    return;
+  }
+
   renderOrder(false);
   setupNativeShare();
 
@@ -143,7 +138,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   document.getElementById('placeOrderBtn').addEventListener('click', () => {
-    const total = document.getElementById('placeOrderTotal').textContent;
-    alert(`Order placed! Total charged: ${total}`);
+    showCongrats(hasShared);
   });
 });

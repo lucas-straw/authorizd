@@ -129,6 +129,55 @@
 
     </div>
 
+    <!-- Congrats screen (hidden until order placed, or ?success=true) -->
+    <div id="congratsScreen" class="d-none">
+
+        <div class="congrats-hero">
+            <div class="confetti-burst" aria-hidden="true">🎉</div>
+            <div class="savings-badge animate-pop">
+                <span class="savings-label">You saved</span>
+                <span class="savings-amount" id="congratsSavings"></span>
+            </div>
+        </div>
+
+        <div class="container py-4" style="max-width: 680px;">
+
+            <div class="text-center mb-4">
+                <h1 class="fw-bold mb-2">Order Confirmed! 🛍️</h1>
+                <p class="text-muted fs-5">Thanks for sharing — your discount was applied automatically.</p>
+            </div>
+
+            <div class="card congrats-card shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <h6 class="text-muted text-uppercase fw-semibold small mb-3">Your Savings Breakdown</h6>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">Original total</span>
+                        <span class="text-decoration-line-through text-muted" id="congratsOriginal"></span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2 text-success fw-semibold">
+                        <span><i class="bi bi-facebook me-1"></i> Share discount (15%)</span>
+                        <span id="congratsDiscount"></span>
+                    </div>
+                    <hr class="my-2">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="fw-bold fs-5">You paid</span>
+                        <span class="fw-bold fs-4 text-success" id="congratsTotal"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="savings-callout text-center mb-4">
+                <p class="mb-1 fw-semibold fs-5">Your friends see your post. You save money.</p>
+                <p class="mb-0 text-muted small">Share again next time for another 15% off.</p>
+            </div>
+
+            <a href="share.html" class="btn btn-place-order w-100 btn-lg">
+                <i class="bi bi-bag-plus me-2"></i> Shop Again
+            </a>
+
+        </div>
+    </div>
+
     <footer class="text-center text-muted py-4 border-top mt-2">
         <small>&copy; 2026 authorizd &middot; <a href="#" class="text-muted">Terms</a> &middot; <a href="#" class="text-muted">Privacy</a></small>
     </footer>
