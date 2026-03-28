@@ -1,16 +1,19 @@
 /**
- * Checkout — Social Share & Save
- * Users share their cart before paying and get 15% off the current order.
+ * Checkout — Facebook Share & Save
+ * User shares their cart to Facebook via the JS SDK.
+ * The discount is only applied after Facebook confirms the post was made.
  */
 
 // ---------------------------------------------------------------------------
-// Config
+// Config — store owner replaces this with their Facebook App ID
+// Get one free at: developers.facebook.com → Create App → Consumer
 // ---------------------------------------------------------------------------
+const FB_APP_ID = 'YOUR_FB_APP_ID';
+
 const DISCOUNT_PERCENTAGE = 15;
 
 // Mock order — in a real integration pull from session / URL params
 const ORDER = {
-  id: 'AU-8472',
   items: [
     { name: 'Premium Wireless Headphones', qty: 1, price: 89.99 },
     { name: 'Leather Phone Case',           qty: 2, price: 17.50 },
@@ -18,22 +21,26 @@ const ORDER = {
   shipping: 0,
 };
 
-const SHARE_TEXT =
-  `Just about to grab some great stuff from authorizd! 🛍️ Check them out! #authorizd #shopping`;
-const SHARE_URL = window.location.href;
+// Content that will be pre-filled in the Facebook post
+const SHARE_TEXT = `Just grabbed something great from authorizd! 🛍️ Check them out — amazing products. #authorizd #shopping`;
+const SHARE_URL  = window.location.href;
 
-const PLATFORMS = {
-  twitter:  { label: 'X (Twitter)', shareUrl: (t, u) => `https://twitter.com/intent/tweet?text=${enc(t)}&url=${enc(u)}` },
-  facebook: { label: 'Facebook',    shareUrl: (t, u) => `https://www.facebook.com/sharer/sharer.php?u=${enc(u)}&quote=${enc(t)}` },
-  whatsapp: { label: 'WhatsApp',    shareUrl: (t, u) => `https://wa.me/?text=${enc(t + '\n' + u)}` },
-  linkedin: { label: 'LinkedIn',    shareUrl: (t, u) => `https://www.linkedin.com/sharing/share-offsite/?url=${enc(u)}&summary=${enc(t)}` },
-  native:   { label: 'Other',       shareUrl: null },
+// ---------------------------------------------------------------------------
+// Facebook SDK init
+// fbAsyncInit is called automatically by the SDK once it loads
+// ---------------------------------------------------------------------------
+window.fbAsyncInit = function () {
+  FB.init({
+    appId:   FB_APP_ID,
+    cookie:  true,
+    xfbml:   true,
+    version: 'v19.0',
+  });
 };
 
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
-function enc(s) { return encodeURIComponent(s); }
 function fmt(n) { return '$' + n.toFixed(2); }
 
 function calcTotals(discounted = false) {
@@ -44,7 +51,7 @@ function calcTotals(discounted = false) {
 }
 
 // ---------------------------------------------------------------------------
-// Render order
+// Render order summary
 // ---------------------------------------------------------------------------
 function renderOrder(discounted = false) {
   const { subtotal, discount, total } = calcTotals(discounted);
@@ -57,68 +64,110 @@ function renderOrder(discounted = false) {
     </tr>
   `).join('');
 
-  document.getElementById('orderSubtotal').textContent = fmt(subtotal);
-  document.getElementById('orderTotal').textContent    = fmt(total);
-  document.getElementById('placeOrderTotal').textContent = fmt(total);
+  document.getElementById('orderSubtotal').textContent    = fmt(subtotal);
+  document.getElementById('orderTotal').textContent       = fmt(total);
+  document.getElementById('placeOrderTotal').textContent  = fmt(total);
 
   if (discounted) {
     document.getElementById('discountAmount').textContent = '-' + fmt(discount);
     const row = document.getElementById('discountRow');
     row.classList.remove('d-none');
-    void row.offsetHeight; // trigger reflow for animation
+    void row.offsetHeight;
     row.classList.add('animate-in');
   }
 }
 
 // ---------------------------------------------------------------------------
-// Share handler
+// Facebook share flow
 // ---------------------------------------------------------------------------
 let hasShared = false;
 
-function handleShare(platform) {
-  if (platform !== 'native') {
-    const url = PLATFORMS[platform].shareUrl(SHARE_TEXT, SHARE_URL);
-    window.open(url, '_blank', 'width=620,height=480,noopener,noreferrer');
-  }
+function openFBShare() {
+  // Guard: don't re-trigger if already applied
+  if (hasShared) return;
 
-  if (hasShared) return; // discount already applied
-  hasShared = true;
+  // Show loading state on button
+  const btn = document.getElementById('fbShareBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Opening Facebook…';
 
-  applyDiscount();
+  // Wait for SDK to be ready, then open share dialog
+  waitForFB(() => {
+    FB.ui({
+      method: 'share',
+      href:   SHARE_URL,
+      quote:  SHARE_TEXT,
+    }, function (response) {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="bi bi-facebook"></i> Share on Facebook &amp; Save 15%';
+
+      if (response && !response.error_message) {
+        // Facebook confirmed the post was shared
+        hasShared = true;
+        applyDiscount();
+      } else {
+        // User closed or cancelled the dialog — show nudge
+        showCancelNudge();
+      }
+    });
+  });
 }
 
+// Polls until the FB SDK is available (it loads asynchronously)
+function waitForFB(callback) {
+  if (typeof FB !== 'undefined') {
+    callback();
+  } else {
+    setTimeout(() => waitForFB(callback), 100);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Apply discount
+// ---------------------------------------------------------------------------
 function applyDiscount() {
-  // Update the order totals
   renderOrder(true);
 
-  // Swap share section to success state
+  // Swap share card to success state
   document.getElementById('sharePrompt').classList.add('d-none');
   const success = document.getElementById('shareSuccess');
   success.classList.remove('d-none');
   void success.offsetHeight;
   success.classList.add('animate-in');
 
-  // Pulse the order total to draw attention
+  // Pulse the total to draw attention
   const totalCell = document.getElementById('orderTotal');
   totalCell.classList.add('total-updated');
   setTimeout(() => totalCell.classList.remove('total-updated'), 1_800);
 
-  // Update place order button style
+  // Turn the place order button green
   document.getElementById('placeOrderBtn').classList.add('discounted');
 }
 
 // ---------------------------------------------------------------------------
-// Native Web Share API (mobile)
+// Cancel nudge
+// ---------------------------------------------------------------------------
+function showCancelNudge() {
+  document.getElementById('cancelNudge').classList.remove('d-none');
+}
+
+// ---------------------------------------------------------------------------
+// Native Web Share API (secondary — Instagram / other apps on mobile)
+// No verified callback available, so no discount for this path
 // ---------------------------------------------------------------------------
 function setupNativeShare() {
   const btn = document.getElementById('nativeShareBtn');
   if (!navigator.share) return;
+
   btn.classList.remove('d-none');
   btn.addEventListener('click', async () => {
     try {
-      await navigator.share({ title: 'Check out authorizd!', text: SHARE_TEXT, url: SHARE_URL });
-      handleShare('native');
-    } catch { /* cancelled */ }
+      await navigator.share({
+        title: 'Check out authorizd!',
+        text:  SHARE_TEXT,
+        url:   SHARE_URL,
+      });
+    } catch { /* user cancelled */ }
   });
 }
 
@@ -129,11 +178,14 @@ document.addEventListener('DOMContentLoaded', () => {
   renderOrder(false);
   setupNativeShare();
 
-  document.querySelectorAll('[data-platform]').forEach(btn => {
-    btn.addEventListener('click', () => handleShare(btn.dataset.platform));
+  document.getElementById('fbShareBtn').addEventListener('click', openFBShare);
+  document.getElementById('retryBtn').addEventListener('click', () => {
+    document.getElementById('cancelNudge').classList.add('d-none');
+    openFBShare();
   });
 
   document.getElementById('placeOrderBtn').addEventListener('click', () => {
-    alert(`Order placed! Total charged: ${document.getElementById('placeOrderTotal').textContent}`);
+    const total = document.getElementById('placeOrderTotal').textContent;
+    alert(`Order placed! Total charged: ${total}`);
   });
 });
