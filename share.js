@@ -192,7 +192,7 @@ function showCongrats(discounted) {
   const { subtotal, discount, total } = calcTotals(discounted);
 
   // Hide checkout, show congrats
-  document.querySelector('.container.py-4').classList.add('d-none');
+  document.getElementById('checkoutContainer').classList.add('d-none');
   const screen = document.getElementById('congratsScreen');
   screen.classList.remove('d-none');
 
