@@ -104,13 +104,17 @@ function setupNativeShare() {
 }
 
 function launchConfetti() {
-  const canvas = document.getElementById('confettiCanvas');
-  const fire = confetti.create(canvas, { resize: true, useWorker: true });
-  fire({ particleCount: 120, spread: 80, origin: { y: 0.5 } });
+  // Centre burst from top
+  confetti({ particleCount: 150, spread: 90, origin: { x: 0.5, y: 0.2 } });
+  // Side bursts
   setTimeout(() => {
-    fire({ particleCount: 60, angle: 60,  spread: 55, origin: { x: 0, y: 0.6 } });
-    fire({ particleCount: 60, angle: 120, spread: 55, origin: { x: 1, y: 0.6 } });
+    confetti({ particleCount: 80, angle: 60,  spread: 70, origin: { x: 0, y: 0.3 } });
+    confetti({ particleCount: 80, angle: 120, spread: 70, origin: { x: 1, y: 0.3 } });
   }, 300);
+  // Trailing shower down the middle
+  setTimeout(() => {
+    confetti({ particleCount: 60, spread: 120, origin: { x: 0.5, y: 0 } });
+  }, 650);
 }
 
 function showCongrats(discounted) {
