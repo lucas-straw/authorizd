@@ -1,5 +1,5 @@
 /* ============================================================
-   Checkout — Share & Save styles
+   Checkout — Facebook Share & Save styles
    ============================================================ */
 
 body {
@@ -7,7 +7,6 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-/* ── Card radius ── */
 .card {
   border-radius: 14px;
   overflow: hidden;
@@ -32,36 +31,92 @@ body {
   font-size: 1.4rem;
 }
 
-/* ── Share buttons ── */
-.share-btn {
-  display: inline-flex;
+/* ── Facebook primary button ── */
+.btn-fb-share {
+  display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 9px 16px;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 0.88rem;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 14px 20px;
+  background: #1877F2;
   color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 1rem;
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
-  white-space: nowrap;
+  box-shadow: 0 4px 14px rgba(24, 119, 242, 0.45);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s;
 }
 
-.share-btn:hover {
+.btn-fb-share:hover:not(:disabled) {
+  background: #1565d8;
   transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 8px 22px rgba(24, 119, 242, 0.55);
 }
 
-.share-btn:active {
+.btn-fb-share:active:not(:disabled) {
   transform: translateY(0);
+}
+
+.btn-fb-share:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+/* ── Secondary share button (Instagram / native) ── */
+.btn-secondary-share {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 11px 20px;
+  background: transparent;
+  color: #fff;
+  border: 2px solid rgba(255, 255, 255, 0.45);
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, transform 0.15s;
+}
+
+.btn-secondary-share:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.7);
+  transform: translateY(-1px);
+}
+
+/* ── Cancel nudge ── */
+.cancel-nudge {
+  background: rgba(0, 0, 0, 0.18);
+  border-radius: 10px;
+  padding: 14px 16px;
+  text-align: center;
+  color: #fff;
+}
+
+.btn-retry {
+  background: rgba(255, 255, 255, 0.25);
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  color: #fff;
+  border-radius: 8px;
+  padding: 8px 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btn-retry:hover {
+  background: rgba(255, 255, 255, 0.38);
 }
 
 .share-fine-print {
   font-size: 0.78rem;
   opacity: 0.55;
-  margin-bottom: 0;
 }
 
 /* ── Success state ── */
@@ -70,12 +125,12 @@ body {
   color: #fff;
 }
 
-/* ── Discount row in table ── */
-.discount-row-animate td {
+/* ── Discount row animation ── */
+#discountRow td {
   color: #198754;
 }
 
-/* ── Live total pulse ── */
+/* ── Total pulse on discount apply ── */
 @keyframes totalPulse {
   0%   { color: inherit; transform: scale(1); }
   30%  { color: #198754; transform: scale(1.08); }
@@ -96,7 +151,7 @@ body {
   font-weight: 700;
   font-size: 1.1rem;
   padding: 16px;
-  transition: transform 0.15s, box-shadow 0.15s, background 0.3s;
+  transition: transform 0.15s, box-shadow 0.15s, background 0.4s;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
 }
 
@@ -126,10 +181,5 @@ body {
 }
 
 /* ── Footer ── */
-footer a {
-  text-decoration: none;
-}
-
-footer a:hover {
-  text-decoration: underline;
-}
+footer a { text-decoration: none; }
+footer a:hover { text-decoration: underline; }
