@@ -174,6 +174,20 @@ function setupNativeShare() {
 // ---------------------------------------------------------------------------
 // Init
 // ---------------------------------------------------------------------------
+function launchConfetti() {
+  const canvas = document.getElementById('confettiCanvas');
+  const fire = confetti.create(canvas, { resize: true, useWorker: true });
+
+  // First burst
+  fire({ particleCount: 120, spread: 80, origin: { y: 0.5 } });
+
+  // Follow-up burst from the sides
+  setTimeout(() => {
+    fire({ particleCount: 60, angle: 60,  spread: 55, origin: { x: 0, y: 0.6 } });
+    fire({ particleCount: 60, angle: 120, spread: 55, origin: { x: 1, y: 0.6 } });
+  }, 300);
+}
+
 function showCongrats(discounted) {
   const { subtotal, discount, total } = calcTotals(discounted);
 
@@ -188,6 +202,7 @@ function showCongrats(discounted) {
   document.getElementById('congratsTotal').textContent    = fmt(total);
 
   window.scrollTo({ top: 0, behavior: 'smooth' });
+  launchConfetti();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
