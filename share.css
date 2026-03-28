@@ -93,19 +93,26 @@ footer a:hover { text-decoration: underline; }
   background: linear-gradient(135deg, #198754 0%, #0d6e44 100%);
   padding: 48px 24px 56px;
   text-align: center;
+  position: relative;
+  overflow: hidden;
 }
 
-.confetti-burst {
-  font-size: 4rem;
-  animation: pop 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  display: block;
-  margin-bottom: 16px;
+.confetti-lottie {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 500px;
+  height: 100%;
+  pointer-events: none;
 }
 
 .savings-badge {
   display: inline-flex; flex-direction: column; align-items: center;
   background: #fff; border-radius: 20px; padding: 20px 40px;
   box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+  position: relative;
 }
 
 .savings-label {
@@ -116,11 +123,6 @@ footer a:hover { text-decoration: underline; }
 .savings-amount {
   font-size: clamp(2.5rem, 10vw, 4rem);
   font-weight: 800; color: #198754; line-height: 1.1;
-}
-
-@keyframes pop {
-  from { transform: scale(0.5); opacity: 0; }
-  to   { transform: scale(1);   opacity: 1; }
 }
 
 @keyframes animatePop {

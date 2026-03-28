@@ -17,6 +17,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
     <link href="share.css" rel="stylesheet">
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@2.0.3/dist/lottie-player.js"></script>
 </head>
 <body>
 
@@ -73,67 +74,56 @@
 
         <div class="share-section card border-0 text-white mb-4">
             <div class="card-body p-4">
-
                 <div id="sharePrompt">
                     <div class="d-flex align-items-center gap-3 mb-4">
-                        <div class="share-icon-circle">
-                            <i class="bi bi-megaphone-fill"></i>
-                        </div>
+                        <div class="share-icon-circle"><i class="bi bi-megaphone-fill"></i></div>
                         <div>
                             <h5 class="fw-bold mb-1">Share your cart &amp; save 15% right now</h5>
                             <p class="mb-0 opacity-75 small">We'll post to your Facebook feed for you — one tap and the discount is yours.</p>
                         </div>
                     </div>
-
                     <button id="fbShareBtn" class="btn-fb-share w-100 mb-3">
-                        <i class="bi bi-facebook"></i>
-                        Share on Facebook &amp; Save 15%
+                        <i class="bi bi-facebook"></i> Share on Facebook &amp; Save 15%
                     </button>
-
                     <button id="nativeShareBtn" class="btn-secondary-share w-100 d-none">
-                        <i class="bi bi-instagram"></i>
-                        Share to Instagram or elsewhere
+                        <i class="bi bi-instagram"></i> Share to Instagram or elsewhere
                     </button>
-
                     <div id="cancelNudge" class="cancel-nudge d-none mt-3">
                         <p class="mb-2 small opacity-80">Looks like you didn't post — no worries, tap below to try again!</p>
-                        <button id="retryBtn" class="btn-retry">
-                            <i class="bi bi-arrow-repeat me-1"></i> Try Again
-                        </button>
+                        <button id="retryBtn" class="btn-retry"><i class="bi bi-arrow-repeat me-1"></i> Try Again</button>
                     </div>
-
                     <p class="share-fine-print mt-3 mb-0">
                         <i class="bi bi-shield-check me-1"></i>
                         Discount applied the moment you post &middot; One per order
                     </p>
                 </div>
-
                 <div id="shareSuccess" class="d-none text-center py-2">
-                    <div class="success-checkmark mb-2">
-                        <i class="bi bi-check-circle-fill"></i>
-                    </div>
+                    <div class="success-checkmark mb-2"><i class="bi bi-check-circle-fill"></i></div>
                     <h5 class="fw-bold mb-1">Posted &amp; Discount Applied!</h5>
                     <p class="mb-0 opacity-75">15% has been taken off your order total above.</p>
                 </div>
-
             </div>
         </div>
 
         <button id="placeOrderBtn" class="btn btn-place-order w-100 btn-lg mb-3">
             Place Order &mdash; <span id="placeOrderTotal"></span>
         </button>
-
         <p class="text-center text-muted small">
             <i class="bi bi-lock-fill me-1"></i> Payments are secure and encrypted
         </p>
 
     </div>
 
-    <!-- Congrats screen (hidden until order placed, or ?success=true) -->
+    <!-- Congrats screen -->
     <div id="congratsScreen" class="d-none">
-
         <div class="congrats-hero">
-            <div class="confetti-burst" aria-hidden="true">🎉</div>
+            <lottie-player
+                src="https://assets4.lottiefiles.com/packages/lf20_touohxv0.json"
+                background="transparent"
+                speed="1"
+                class="confetti-lottie"
+                autoplay>
+            </lottie-player>
             <div class="savings-badge animate-pop">
                 <span class="savings-label">You saved</span>
                 <span class="savings-amount" id="congratsSavings"></span>
@@ -141,12 +131,10 @@
         </div>
 
         <div class="container py-4" style="max-width: 680px;">
-
             <div class="text-center mb-4">
                 <h1 class="fw-bold mb-2">Order Confirmed! 🛍️</h1>
                 <p class="text-muted fs-5">Thanks for sharing — your discount was applied automatically.</p>
             </div>
-
             <div class="card congrats-card shadow-sm mb-4">
                 <div class="card-body p-4">
                     <h6 class="text-muted text-uppercase fw-semibold small mb-3">Your Savings Breakdown</h6>
@@ -165,16 +153,13 @@
                     </div>
                 </div>
             </div>
-
             <div class="savings-callout text-center mb-4">
                 <p class="mb-1 fw-semibold fs-5">Your friends see your post. You save money.</p>
                 <p class="mb-0 text-muted small">Share again next time for another 15% off.</p>
             </div>
-
             <a href="share.html" class="btn btn-place-order w-100 btn-lg">
                 <i class="bi bi-bag-plus me-2"></i> Shop Again
             </a>
-
         </div>
     </div>
 
