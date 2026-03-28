@@ -174,7 +174,30 @@ function setupNativeShare() {
 // ---------------------------------------------------------------------------
 // Init
 // ---------------------------------------------------------------------------
+function showCongrats(discounted) {
+  const { subtotal, discount, total } = calcTotals(discounted);
+
+  // Hide checkout, show congrats
+  document.querySelector('.container.py-4').classList.add('d-none');
+  const screen = document.getElementById('congratsScreen');
+  screen.classList.remove('d-none');
+
+  document.getElementById('congratsSavings').textContent  = fmt(discount);
+  document.getElementById('congratsOriginal').textContent = fmt(subtotal);
+  document.getElementById('congratsDiscount').textContent = '-' + fmt(discount);
+  document.getElementById('congratsTotal').textContent    = fmt(total);
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+  // ?success=true simulates returning after a completed share + order
+  if (new URLSearchParams(window.location.search).get('success') === 'true') {
+    renderOrder(true);
+    showCongrats(true);
+    return;
+  }
+
   renderOrder(false);
   setupNativeShare();
 
@@ -185,7 +208,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   document.getElementById('placeOrderBtn').addEventListener('click', () => {
-    const total = document.getElementById('placeOrderTotal').textContent;
-    alert(`Order placed! Total charged: ${total}`);
+    showCongrats(hasShared);
   });
 });
