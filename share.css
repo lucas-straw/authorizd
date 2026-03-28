@@ -1,0 +1,196 @@
+/* ============================================================
+   Share & Save — Custom Styles
+   ============================================================ */
+
+body {
+  background: #f4f6fb;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* ── Success icon ── */
+.success-icon {
+  width: 72px;
+  height: 72px;
+  background: linear-gradient(135deg, #20c997, #198754);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  margin: 0 auto;
+  box-shadow: 0 8px 24px rgba(25, 135, 84, 0.35);
+}
+
+/* ── Order table ── */
+.card {
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+/* ── Share section ── */
+.share-section {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 60%, #a855f7 100%);
+  border-radius: 16px !important;
+  box-shadow: 0 12px 40px rgba(99, 102, 241, 0.35);
+}
+
+.share-icon {
+  font-size: 3rem;
+  opacity: 0.9;
+  display: block;
+}
+
+.share-subtitle {
+  opacity: 0.85;
+}
+
+.discount-badge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.25);
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  border-radius: 8px;
+  padding: 2px 10px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 0.5px;
+}
+
+/* ── Share buttons ── */
+.share-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 20px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  white-space: nowrap;
+}
+
+.share-btn:hover:not(.shared) {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+}
+
+.share-btn:active:not(.shared) {
+  transform: translateY(-1px);
+}
+
+.share-btn.shared {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.share-fine-print {
+  font-size: 0.82rem;
+  opacity: 0.6;
+  margin-bottom: 0;
+}
+
+/* ── Discount reveal card ── */
+.discount-reveal {
+  background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+  border-radius: 16px !important;
+  box-shadow: 0 12px 40px rgba(239, 68, 68, 0.35);
+}
+
+.discount-reveal.expired {
+  background: linear-gradient(135deg, #9ca3af, #6b7280);
+  box-shadow: none;
+}
+
+.confetti-row {
+  font-size: 1.8rem;
+  letter-spacing: 6px;
+}
+
+.discount-code-wrapper {
+  background: rgba(0, 0, 0, 0.18);
+  border-radius: 12px;
+  padding: 18px 28px;
+  display: inline-block;
+}
+
+.discount-code {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: clamp(1.5rem, 5vw, 2.2rem);
+  font-weight: 800;
+  letter-spacing: 4px;
+  color: #fff;
+  user-select: all;
+}
+
+/* ── Copy button ── */
+.btn-copy {
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  color: #fff;
+  font-weight: 600;
+  border-radius: 10px;
+  transition: background 0.18s, transform 0.18s;
+}
+
+.btn-copy:hover {
+  background: rgba(255, 255, 255, 0.35);
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.btn-copy.copied {
+  background: rgba(255, 255, 255, 0.95);
+  color: #198754;
+  border-color: rgba(255, 255, 255, 0.9);
+}
+
+/* ── Countdown ── */
+.countdown-wrapper {
+  display: inline-block;
+}
+
+.countdown {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1.8rem;
+  font-weight: 700;
+  background: rgba(0, 0, 0, 0.22);
+  padding: 8px 18px;
+  border-radius: 8px;
+  letter-spacing: 2px;
+  color: #fff;
+}
+
+/* ── Slide-in animation ── */
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-in {
+  animation: fadeSlideIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* ── Shared tracker badge ── */
+#sharedTracker .badge {
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+/* ── Footer ── */
+footer a {
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
