@@ -1,4 +1,6 @@
-const BASE = '/api';
+// In production (Vercel), set VITE_API_URL to your Railway API URL.
+// In dev, Vite proxies /api → localhost:3001 automatically.
+const BASE = import.meta.env.VITE_API_URL || '/api';
 
 function getToken() {
   return localStorage.getItem('authorizd_token');
