@@ -104,14 +104,11 @@ function setupNativeShare() {
 }
 
 function launchConfetti() {
-  // Centre burst from top
   confetti({ particleCount: 150, spread: 90, origin: { x: 0.5, y: 0.2 } });
-  // Side bursts
   setTimeout(() => {
     confetti({ particleCount: 80, angle: 60,  spread: 70, origin: { x: 0, y: 0.3 } });
     confetti({ particleCount: 80, angle: 120, spread: 70, origin: { x: 1, y: 0.3 } });
   }, 300);
-  // Trailing shower down the middle
   setTimeout(() => {
     confetti({ particleCount: 60, spread: 120, origin: { x: 0.5, y: 0 } });
   }, 650);
@@ -119,7 +116,7 @@ function launchConfetti() {
 
 function showCongrats(discounted) {
   const { subtotal, discount, total } = calcTotals(discounted);
-  document.querySelector('.container.py-4').classList.add('d-none');
+  document.getElementById('checkoutContainer').classList.add('d-none');
   const screen = document.getElementById('congratsScreen');
   screen.classList.remove('d-none');
   document.getElementById('congratsSavings').textContent  = fmt(discount);
