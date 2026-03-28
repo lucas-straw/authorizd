@@ -1,0 +1,186 @@
+/* Authorizd Social Share Discount — WooCommerce widget styles */
+
+.authorizd-widget {
+  background: #fff;
+  border: 2px solid #e8f5e9;
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin-bottom: 28px;
+  font-family: inherit;
+}
+
+/* Header row */
+.authorizd-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.authorizd-icon {
+  font-size: 2rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.authorizd-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 4px;
+  color: #1a1a1a;
+}
+
+.authorizd-body {
+  margin: 0;
+  color: #555;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Buttons */
+.authorizd-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.authorizd-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+  text-decoration: none;
+}
+
+.authorizd-btn:hover:not(:disabled) {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+.authorizd-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.authorizd-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.authorizd-btn-facebook {
+  background: #1877F2;
+  color: #fff;
+}
+
+.authorizd-btn-twitter {
+  background: #000;
+  color: #fff;
+}
+
+/* Loading spinner */
+.authorizd-spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255,255,255,0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: authorizd-spin 0.7s linear infinite;
+  vertical-align: middle;
+}
+
+@keyframes authorizd-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Retry nudge */
+.authorizd-nudge {
+  background: #fff8e1;
+  border: 1px solid #ffe082;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.85rem;
+  color: #5d4037;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.authorizd-retry {
+  background: none;
+  border: 1px solid #5d4037;
+  border-radius: 6px;
+  padding: 4px 12px;
+  font-size: 0.82rem;
+  color: #5d4037;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.15s;
+}
+
+.authorizd-retry:hover {
+  background: #5d4037;
+  color: #fff;
+}
+
+/* Success state */
+.authorizd-success {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #e8f5e9;
+  border-radius: 10px;
+  padding: 16px 20px;
+}
+
+.authorizd-check {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: #2e7d32;
+  color: #fff;
+  border-radius: 50%;
+  font-size: 1.1rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.authorizd-success strong {
+  color: #1b5e20;
+  font-size: 1rem;
+}
+
+.authorizd-success-detail {
+  display: block;
+  color: #2e7d32;
+  font-size: 0.88rem;
+  margin-top: 2px;
+}
+
+/* Powered-by footer */
+.authorizd-powered {
+  margin: 8px 0 0;
+  font-size: 0.75rem;
+  color: #aaa;
+  text-align: right;
+}
+
+.authorizd-powered a {
+  color: #aaa;
+  text-decoration: none;
+}
+
+.authorizd-powered a:hover {
+  color: #777;
+  text-decoration: underline;
+}
