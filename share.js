@@ -8,7 +8,7 @@
 // Config — store owner replaces this with their Facebook App ID
 // Get one free at: developers.facebook.com → Create App → Consumer
 // ---------------------------------------------------------------------------
-const FB_APP_ID = 'YOUR_FB_APP_ID';
+const FB_APP_ID = '931561519624337';
 
 const DISCOUNT_PERCENTAGE = 15;
 
