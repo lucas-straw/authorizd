@@ -1,7 +1,5 @@
 /**
  * Checkout — Facebook Share & Save
- * User shares their cart to Facebook via the JS SDK.
- * The discount is only applied after Facebook confirms the post was made.
  */
 
 const FB_APP_ID = '931561519624337';
@@ -33,7 +31,6 @@ function calcTotals(discounted = false) {
 
 function renderOrder(discounted = false) {
   const { subtotal, discount, total } = calcTotals(discounted);
-
   document.getElementById('orderItems').innerHTML = ORDER.items.map(item => `
     <tr>
       <td class="ps-4">${item.name}</td>
@@ -41,11 +38,9 @@ function renderOrder(discounted = false) {
       <td class="text-end pe-4">${fmt(item.price * item.qty)}</td>
     </tr>
   `).join('');
-
   document.getElementById('orderSubtotal').textContent   = fmt(subtotal);
   document.getElementById('orderTotal').textContent      = fmt(total);
   document.getElementById('placeOrderTotal').textContent = fmt(total);
-
   if (discounted) {
     document.getElementById('discountAmount').textContent = '-' + fmt(discount);
     const row = document.getElementById('discountRow');
@@ -62,7 +57,6 @@ function openFBShare() {
   const btn = document.getElementById('fbShareBtn');
   btn.disabled = true;
   btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Opening Facebook…';
-
   waitForFB(() => {
     FB.ui({ method: 'share', href: SHARE_URL, quote: SHARE_TEXT }, function (response) {
       btn.disabled = false;
@@ -109,6 +103,16 @@ function setupNativeShare() {
   });
 }
 
+function launchConfetti() {
+  const canvas = document.getElementById('confettiCanvas');
+  const fire = confetti.create(canvas, { resize: true, useWorker: true });
+  fire({ particleCount: 120, spread: 80, origin: { y: 0.5 } });
+  setTimeout(() => {
+    fire({ particleCount: 60, angle: 60,  spread: 55, origin: { x: 0, y: 0.6 } });
+    fire({ particleCount: 60, angle: 120, spread: 55, origin: { x: 1, y: 0.6 } });
+  }, 300);
+}
+
 function showCongrats(discounted) {
   const { subtotal, discount, total } = calcTotals(discounted);
   document.querySelector('.container.py-4').classList.add('d-none');
@@ -119,6 +123,7 @@ function showCongrats(discounted) {
   document.getElementById('congratsDiscount').textContent = '-' + fmt(discount);
   document.getElementById('congratsTotal').textContent    = fmt(total);
   window.scrollTo({ top: 0, behavior: 'smooth' });
+  launchConfetti();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -127,16 +132,13 @@ document.addEventListener('DOMContentLoaded', () => {
     showCongrats(true);
     return;
   }
-
   renderOrder(false);
   setupNativeShare();
-
   document.getElementById('fbShareBtn').addEventListener('click', openFBShare);
   document.getElementById('retryBtn').addEventListener('click', () => {
     document.getElementById('cancelNudge').classList.add('d-none');
     openFBShare();
   });
-
   document.getElementById('placeOrderBtn').addEventListener('click', () => {
     showCongrats(hasShared);
   });
