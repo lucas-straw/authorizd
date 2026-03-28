@@ -1,0 +1,46 @@
+name: Release WooCommerce Plugin
+
+on:
+  push:
+    tags:
+      - 'plugin-v*'   # trigger with: git tag plugin-v1.0.0 && git push --tags
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Get version from tag
+        id: version
+        run: echo "version=${GITHUB_REF_NAME#plugin-v}" >> $GITHUB_OUTPUT
+
+      - name: Package plugin ZIP
+        run: |
+          cd woocommerce-plugin
+          zip -r ../authorizd-social-share-v${{ steps.version.outputs.version }}.zip \
+            authorizd-social-share/ \
+            --exclude "*/.*"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "Plugin v${{ steps.version.outputs.version }}"
+          body: |
+            ## Authorizd Social Share Discount — v${{ steps.version.outputs.version }}
+
+            ### Installation
+            1. Download `authorizd-social-share-v${{ steps.version.outputs.version }}.zip` below
+            2. In WordPress: **Plugins → Add New → Upload Plugin**
+            3. Go to **WooCommerce → Authorizd** and enter your API key
+
+            ### Requirements
+            - WordPress 6.0+
+            - WooCommerce 7.0+
+            - PHP 7.4+
+          files: authorizd-social-share-v${{ steps.version.outputs.version }}.zip
+          draft: false
+          prerelease: false
