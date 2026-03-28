@@ -10,6 +10,8 @@
 </head>
 <body>
 
+    <div id="fb-root"></div>
+
     <nav class="navbar navbar-dark bg-dark py-3">
         <div class="container">
             <span class="navbar-brand fw-bold fs-4 d-flex align-items-center gap-2">
@@ -23,7 +25,6 @@
 
         <h1 class="fw-bold mb-4">Complete Your Order</h1>
 
-        <!-- Order Summary Card -->
         <div class="card shadow-sm mb-4">
             <div class="card-header bg-white border-bottom py-3">
                 <h5 class="mb-0 fw-semibold">
@@ -45,9 +46,9 @@
                             <td colspan="2" class="text-end text-muted ps-4 py-2">Subtotal</td>
                             <td class="text-end pe-4 py-2" id="orderSubtotal"></td>
                         </tr>
-                        <tr id="discountRow" class="d-none discount-row-animate">
+                        <tr id="discountRow" class="d-none">
                             <td colspan="2" class="text-end ps-4 py-2 text-success fw-semibold">
-                                <i class="bi bi-megaphone-fill me-1"></i>Social Share Discount (15%)
+                                <i class="bi bi-facebook me-1"></i>Facebook Share Discount (15%)
                             </td>
                             <td class="text-end pe-4 py-2 text-success fw-semibold" id="discountAmount"></td>
                         </tr>
@@ -60,47 +61,40 @@
             </div>
         </div>
 
-        <!-- Share & Save -->
-        <div id="shareSection" class="share-section card border-0 text-white mb-4">
+        <div class="share-section card border-0 text-white mb-4">
             <div class="card-body p-4">
 
                 <div id="sharePrompt">
-                    <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="d-flex align-items-center gap-3 mb-4">
                         <div class="share-icon-circle">
                             <i class="bi bi-megaphone-fill"></i>
                         </div>
                         <div>
-                            <h5 class="fw-bold mb-1">Save 15% on this order!</h5>
-                            <p class="mb-0 opacity-75 small">Share your cart on social media before you pay and we'll take 15% off right now.</p>
+                            <h5 class="fw-bold mb-1">Share your cart &amp; save 15% right now</h5>
+                            <p class="mb-0 opacity-75 small">We'll post to your Facebook feed for you — one tap and the discount is yours.</p>
                         </div>
                     </div>
 
-                    <div class="d-flex flex-wrap gap-2 mb-3">
-                        <button class="share-btn" data-platform="twitter" style="background:#000;">
-                            <i class="bi bi-twitter-x"></i>
-                            <span class="share-label">Post on X</span>
-                        </button>
-                        <button class="share-btn" data-platform="facebook" style="background:#1877F2;">
-                            <i class="bi bi-facebook"></i>
-                            <span class="share-label">Facebook</span>
-                        </button>
-                        <button class="share-btn" data-platform="whatsapp" style="background:#25D366;">
-                            <i class="bi bi-whatsapp"></i>
-                            <span class="share-label">WhatsApp</span>
-                        </button>
-                        <button class="share-btn" data-platform="linkedin" style="background:#0A66C2;">
-                            <i class="bi bi-linkedin"></i>
-                            <span class="share-label">LinkedIn</span>
-                        </button>
-                        <button id="nativeShareBtn" class="share-btn d-none" style="background:rgba(255,255,255,0.15);border:2px solid rgba(255,255,255,0.4);">
-                            <i class="bi bi-share-fill"></i>
-                            <span class="share-label">More</span>
+                    <button id="fbShareBtn" class="btn-fb-share w-100 mb-3">
+                        <i class="bi bi-facebook"></i>
+                        Share on Facebook &amp; Save 15%
+                    </button>
+
+                    <button id="nativeShareBtn" class="btn-secondary-share w-100 d-none">
+                        <i class="bi bi-instagram"></i>
+                        Share to Instagram or elsewhere
+                    </button>
+
+                    <div id="cancelNudge" class="cancel-nudge d-none mt-3">
+                        <p class="mb-2 small opacity-80">Looks like you didn't post — no worries, tap below to try again!</p>
+                        <button id="retryBtn" class="btn-retry">
+                            <i class="bi bi-arrow-repeat me-1"></i> Try Again
                         </button>
                     </div>
 
-                    <p class="mb-0 share-fine-print">
+                    <p class="share-fine-print mt-3 mb-0">
                         <i class="bi bi-shield-check me-1"></i>
-                        One discount per order &middot; Applied instantly to your total above
+                        Discount applied the moment you post &middot; One per order
                     </p>
                 </div>
 
@@ -108,7 +102,7 @@
                     <div class="success-checkmark mb-2">
                         <i class="bi bi-check-circle-fill"></i>
                     </div>
-                    <h5 class="fw-bold mb-1">Discount Applied!</h5>
+                    <h5 class="fw-bold mb-1">Posted &amp; Discount Applied!</h5>
                     <p class="mb-0 opacity-75">15% has been taken off your order total above.</p>
                 </div>
 
@@ -116,7 +110,7 @@
         </div>
 
         <button id="placeOrderBtn" class="btn btn-place-order w-100 btn-lg mb-3">
-            <span id="placeOrderLabel">Place Order &mdash; </span><span id="placeOrderTotal"></span>
+            Place Order &mdash; <span id="placeOrderTotal"></span>
         </button>
 
         <p class="text-center text-muted small">
@@ -130,6 +124,7 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
     <script src="share.js"></script>
 </body>
 </html>

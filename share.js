@@ -1,12 +1,18 @@
 /**
- * Checkout — Social Share & Save
- * Users share their cart before paying and get 15% off the current order.
+ * Checkout — Facebook Share & Save
+ * User shares their cart to Facebook via the JS SDK.
+ * The discount is only applied after Facebook confirms the post was made.
  */
+
+// ---------------------------------------------------------------------------
+// Config — store owner replaces this with their Facebook App ID
+// Get one free at: developers.facebook.com → Create App → Consumer
+// ---------------------------------------------------------------------------
+const FB_APP_ID = 'YOUR_FB_APP_ID';
 
 const DISCOUNT_PERCENTAGE = 15;
 
 const ORDER = {
-  id: 'AU-8472',
   items: [
     { name: 'Premium Wireless Headphones', qty: 1, price: 89.99 },
     { name: 'Leather Phone Case',           qty: 2, price: 17.50 },
@@ -14,19 +20,18 @@ const ORDER = {
   shipping: 0,
 };
 
-const SHARE_TEXT =
-  `Just about to grab some great stuff from authorizd! 🛍️ Check them out! #authorizd #shopping`;
-const SHARE_URL = window.location.href;
+const SHARE_TEXT = `Just grabbed something great from authorizd! 🛍️ Check them out — amazing products. #authorizd #shopping`;
+const SHARE_URL  = window.location.href;
 
-const PLATFORMS = {
-  twitter:  { label: 'X (Twitter)', shareUrl: (t, u) => `https://twitter.com/intent/tweet?text=${enc(t)}&url=${enc(u)}` },
-  facebook: { label: 'Facebook',    shareUrl: (t, u) => `https://www.facebook.com/sharer/sharer.php?u=${enc(u)}&quote=${enc(t)}` },
-  whatsapp: { label: 'WhatsApp',    shareUrl: (t, u) => `https://wa.me/?text=${enc(t + '\n' + u)}` },
-  linkedin: { label: 'LinkedIn',    shareUrl: (t, u) => `https://www.linkedin.com/sharing/share-offsite/?url=${enc(u)}&summary=${enc(t)}` },
-  native:   { label: 'Other',       shareUrl: null },
+window.fbAsyncInit = function () {
+  FB.init({
+    appId:   FB_APP_ID,
+    cookie:  true,
+    xfbml:   true,
+    version: 'v19.0',
+  });
 };
 
-function enc(s) { return encodeURIComponent(s); }
 function fmt(n) { return '$' + n.toFixed(2); }
 
 function calcTotals(discounted = false) {
@@ -47,9 +52,9 @@ function renderOrder(discounted = false) {
     </tr>
   `).join('');
 
-  document.getElementById('orderSubtotal').textContent = fmt(subtotal);
-  document.getElementById('orderTotal').textContent    = fmt(total);
-  document.getElementById('placeOrderTotal').textContent = fmt(total);
+  document.getElementById('orderSubtotal').textContent    = fmt(subtotal);
+  document.getElementById('orderTotal').textContent       = fmt(total);
+  document.getElementById('placeOrderTotal').textContent  = fmt(total);
 
   if (discounted) {
     document.getElementById('discountAmount').textContent = '-' + fmt(discount);
@@ -62,15 +67,38 @@ function renderOrder(discounted = false) {
 
 let hasShared = false;
 
-function handleShare(platform) {
-  if (platform !== 'native') {
-    const url = PLATFORMS[platform].shareUrl(SHARE_TEXT, SHARE_URL);
-    window.open(url, '_blank', 'width=620,height=480,noopener,noreferrer');
-  }
-
+function openFBShare() {
   if (hasShared) return;
-  hasShared = true;
-  applyDiscount();
+
+  const btn = document.getElementById('fbShareBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Opening Facebook…';
+
+  waitForFB(() => {
+    FB.ui({
+      method: 'share',
+      href:   SHARE_URL,
+      quote:  SHARE_TEXT,
+    }, function (response) {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="bi bi-facebook"></i> Share on Facebook &amp; Save 15%';
+
+      if (response && !response.error_message) {
+        hasShared = true;
+        applyDiscount();
+      } else {
+        showCancelNudge();
+      }
+    });
+  });
+}
+
+function waitForFB(callback) {
+  if (typeof FB !== 'undefined') {
+    callback();
+  } else {
+    setTimeout(() => waitForFB(callback), 100);
+  }
 }
 
 function applyDiscount() {
@@ -89,6 +117,10 @@ function applyDiscount() {
   document.getElementById('placeOrderBtn').classList.add('discounted');
 }
 
+function showCancelNudge() {
+  document.getElementById('cancelNudge').classList.remove('d-none');
+}
+
 function setupNativeShare() {
   const btn = document.getElementById('nativeShareBtn');
   if (!navigator.share) return;
@@ -96,7 +128,6 @@ function setupNativeShare() {
   btn.addEventListener('click', async () => {
     try {
       await navigator.share({ title: 'Check out authorizd!', text: SHARE_TEXT, url: SHARE_URL });
-      handleShare('native');
     } catch { /* cancelled */ }
   });
 }
@@ -105,11 +136,14 @@ document.addEventListener('DOMContentLoaded', () => {
   renderOrder(false);
   setupNativeShare();
 
-  document.querySelectorAll('[data-platform]').forEach(btn => {
-    btn.addEventListener('click', () => handleShare(btn.dataset.platform));
+  document.getElementById('fbShareBtn').addEventListener('click', openFBShare);
+  document.getElementById('retryBtn').addEventListener('click', () => {
+    document.getElementById('cancelNudge').classList.add('d-none');
+    openFBShare();
   });
 
   document.getElementById('placeOrderBtn').addEventListener('click', () => {
-    alert(`Order placed! Total charged: ${document.getElementById('placeOrderTotal').textContent}`);
+    const total = document.getElementById('placeOrderTotal').textContent;
+    alert(`Order placed! Total charged: ${total}`);
   });
 });
