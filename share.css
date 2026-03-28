@@ -183,3 +183,72 @@ body {
 /* ── Footer ── */
 footer a { text-decoration: none; }
 footer a:hover { text-decoration: underline; }
+
+/* ── Congrats screen ── */
+.congrats-hero {
+  background: linear-gradient(135deg, #198754 0%, #0d6e44 100%);
+  padding: 48px 24px 56px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.confetti-burst {
+  font-size: 4rem;
+  animation: pop 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.savings-badge {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  background: #fff;
+  border-radius: 20px;
+  padding: 20px 40px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+}
+
+.savings-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #6c757d;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.savings-amount {
+  font-size: clamp(2.5rem, 10vw, 4rem);
+  font-weight: 800;
+  color: #198754;
+  line-height: 1.1;
+}
+
+@keyframes pop {
+  from { transform: scale(0.5); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+@keyframes animatePop {
+  0%   { transform: scale(0.8) translateY(20px); opacity: 0; }
+  60%  { transform: scale(1.05) translateY(-4px); opacity: 1; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+.animate-pop {
+  animation: animatePop 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.congrats-card {
+  border-radius: 16px !important;
+  border: none !important;
+}
+
+.savings-callout {
+  background: #f0fdf4;
+  border: 1.5px solid #bbf7d0;
+  border-radius: 12px;
+  padding: 18px 24px;
+  color: #166534;
+}
